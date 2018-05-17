@@ -161,8 +161,28 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805171852311_Initial-Create.cs" />
+    <Compile Include="Migrations\201805171852311_Initial-Create.Designer.cs">
+      <DependentUpon>201805171852311_Initial-Create.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805171909598_MaxLengthOnNames.cs" />
+    <Compile Include="Migrations\201805171909598_MaxLengthOnNames.Designer.cs">
+      <DependentUpon>201805171909598_MaxLengthOnNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805171912464_ColumnFirstName.cs" />
+    <Compile Include="Migrations\201805171912464_ColumnFirstName.Designer.cs">
+      <DependentUpon>201805171912464_ColumnFirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805171953027_ComplexDataModel.cs" />
+    <Compile Include="Migrations\201805171953027_ComplexDataModel.Designer.cs">
+      <DependentUpon>201805171953027_ComplexDataModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Enrollment.cs" />
+    <Compile Include="Models\Instructor.cs" />
+    <Compile Include="Models\OfficeAssignment.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\EnrollmentDateGroups.cs" />
@@ -227,6 +247,20 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805171852311_Initial-Create.resx">
+      <DependentUpon>201805171852311_Initial-Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805171909598_MaxLengthOnNames.resx">
+      <DependentUpon>201805171909598_MaxLengthOnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805171912464_ColumnFirstName.resx">
+      <DependentUpon>201805171912464_ColumnFirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805171953027_ComplexDataModel.resx">
+      <DependentUpon>201805171953027_ComplexDataModel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
