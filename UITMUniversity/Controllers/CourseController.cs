@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using UITMUniversity.DAL;
 using UITMUniversity.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace UITMUniversity.Controllers
 {
@@ -40,7 +41,7 @@ namespace UITMUniversity.Controllers
         // GET: Course/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name");
+            PopulateDepartmentsDropDownList();
             return View();
         }
 
@@ -51,14 +52,23 @@ namespace UITMUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Courses.Add(course);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Courses.Add(course);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            catch(RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if problem persists, see your system administrator.");
+            }
+
+
+            PopulateDepartmentsDropDownList(course.DepartmentID);
             return View(course);
         }
 
@@ -74,7 +84,7 @@ namespace UITMUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentID);
             return View(course);
         }
 
@@ -85,13 +95,22 @@ namespace UITMUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(course).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(course).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+
+            catch(RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+            PopulateDepartmentsDropDownList(course.DepartmentID);
             return View(course);
         }
 
@@ -128,6 +147,14 @@ namespace UITMUniversity.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void PopulateDepartmentsDropDownList(object selectDepartment = null)
+        {
+            var departmentQuery = from d in db.Departments
+                                  orderby d.Name
+                                  select d;
+            ViewBag.DepartmentID = new SelectList(departmentQuery, "DepartmentID", "Name", selectDepartment);
         }
     }
 }
